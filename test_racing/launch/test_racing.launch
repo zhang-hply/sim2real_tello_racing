@@ -3,4 +3,6 @@
   <node name="test_racing" pkg="test_racing" type="test_racing.py" output="screen">      
 	  <param name="ddr_dir" value="$(find test_racing)"/>
   </node>
+
+  <include file="$(find tello_driver)/launch/tello_node.launch"/>
 </launch>	

@@ -53,9 +53,11 @@
     <!-- Drone Racing -->
     <group ns="$(arg quad_name)">
         <node pkg="drone_racing" type="drone_racing_node" name="drone_racing_node" output="screen">
-            <remap from="image_rgb" to="/$(arg quad_name)/rgb_camera/camera_1/image_raw"/>
+            <!-- <remap from="image_rgb" to="/$(arg quad_name)/rgb_camera/camera_1/image_raw"/> -->
+            <remap from="image_rgb" to="/tello/camera/image_raw"/>
             <remap from="camera_info" to="/$(arg quad_name)/vi_sensor_1/camera_depth/depth/camera_info"/>
-            <remap from="state_estimate" to="odometry_sensor1/odometry"/>
+            <!-- <remap from="state_estimate" to="odometry_sensor1/odometry"/> -->
+            <remap from="state_estimate" to="/tello/odometry1"/>
             <rosparam file="$(find drone_racing)/parameters/main.yaml"/>
             <rosparam file="$(find drone_racing)/parameters/goals.yaml"/>
             <param name="root_dir" value="$(find deep_drone_racing_learner)/data/Training"/>

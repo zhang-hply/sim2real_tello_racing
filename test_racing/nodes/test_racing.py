@@ -35,11 +35,12 @@ def run_testing():
     assert os.path.isfile(texture_goal_fname), "Not found bkg_file: %s" % texture_goal_fname
     assert os.path.isfile(texture_floor_fname), "Not found floor_bkg_file: %s" % texture_floor_fname
 
-    num_iterations_per_bkg = 10
+    num_iterations_per_bkg = 1
 
     # Read all the backgrounds and order them
     all_images = paths.list_images(bkg_folder)
     all_images = sorted(all_images)
+    all_image = all_images[0]
 
     result_dict = {'gate_pass': {}, 'exec_time': {}}
 
@@ -59,7 +60,7 @@ def run_testing():
     all_floor_materials = paths.list_images(floor_folder)
     all_floor_materials = sorted(all_floor_materials)
 
-    for i, bkg_img_fname in enumerate(all_images):
+    for i, bkg_img_fname in enumerate(all_image):
         # Copy new background
         os.system("cp {} {}".format(bkg_img_fname, texture_goal_fname))
         # Copy new gate background

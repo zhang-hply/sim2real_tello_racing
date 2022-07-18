@@ -1,8 +1,8 @@
 # Data collection
 max_divergence: 1.2                 # maximum divergence between state estimate and desired state
 global_traj_max_v: 10.0             # max velocity of precomputed global trajectory
-max_velocity: 4.0                   # max velocity
-min_velocity: 2.0                   # min velocity
+max_velocity: 1.0                   # max velocity
+min_velocity: 0.5                   # min velocity
 d_replan: 1.5                       # when within this distance to waypoint, plan to next waypoint
 load_existing_trajectory: true      # load saved global trajectory
 horizon_min: 2.0                    # minimum length to plan trajectories when collecting data

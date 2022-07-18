@@ -102,6 +102,7 @@ void DroneRacing::mainloop(const ros::TimerEvent& time) {
     gazebo_rviz_visualizer_->visualizeGates();
     ros::WallTime start_mainloop = ros::WallTime::now();
     updateStateMachine();
+    state_machine_ = State::kRacing;
     switch (state_machine_) {
       case State::kOff:
       case State::kHover:
@@ -167,7 +168,7 @@ quadrotor_common::TrajectoryPoint DroneRacing::getEndState() {
 }
 
 void DroneRacing::performNavigation() {
-  if (checkStateEstDesStateDivergence()) {
+  if (checkStateEstDesStateDivergence() && false) {
     ROS_WARN("[%s] Desired state and state estimate diverged.", ros::this_node::getName().c_str());
     ROS_WARN("Desired state: [%f, %f, %f]", desired_state_world_.position.x(),
              desired_state_world_.position.y(), desired_state_world_.position.z());
@@ -384,8 +385,9 @@ bool DroneRacing::checkStateEstDesStateDivergence() {
   divergence_vec = Eigen::Vector3d(desired_state_world_.position.x() - state_estimate_world_.pose.pose.position.x,
                                    desired_state_world_.position.y() - state_estimate_world_.pose.pose.position.y,
                                    desired_state_world_.position.z() - state_estimate_world_.pose.pose.position.z);
-
-  divergence_pub_.publish(divergence_vec.norm());
+  std_msgs::Float64 msg;
+  msg.data = divergence_vec.norm();
+  divergence_pub_.publish(msg);
   return (divergence_vec.norm() > max_divergence_);
 }
 
@@ -426,6 +428,14 @@ void DroneRacing::transformToQuadFrame() {
   // transform desired_state_world_ to desired_state_quad_
   Eigen::Quaterniond q_W_O = T_W_S_.getEigenQuaternion();
   const Eigen::Vector3d t_W_O = T_W_S_.getPosition();
+
+  /**
+   * ROS_INFO("t_W_O/x: %f, y: %f, z:%f", t_W_O.x(), t_W_O.y(), t_W_O.z());  
+   * ROS_INFO("q_W_O/w: %f, x: %f, y: %f, z:%f", q_W_O.w(), q_W_O.x(), q_W_O.y(), q_W_O.z());
+   *  q_W_O/w: 1.000000, x: 0.000000, y: 0.000000, z:0.000000
+   * t_W_O/x: 0.000000, y: 0.000000, z:0.000000
+   */
+
   double scale_W_O = 1.0;
   desired_state_quad_ = desired_state_world_;
   desired_state_quad_.position = 1.0 / scale_W_O * (q_W_O.inverse() * (desired_state_world_.position - t_W_O));
