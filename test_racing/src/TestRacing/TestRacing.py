@@ -56,7 +56,7 @@ class TestRacing(object):
             os.system("timeout 1s rostopic pub /hummingbird/state_change std_msgs/Bool 'True'")
             # start the navigation
             os.system("timeout 1s rostopic pub /hummingbird/setup_environment std_msgs/Empty")
-
+            print("enter the lla")
             start_time = time.time()
 
             while (time.time() - start_time < 100 and self.crashed == False and self.passed_gates < 30):

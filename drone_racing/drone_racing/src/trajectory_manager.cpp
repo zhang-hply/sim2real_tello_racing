@@ -37,6 +37,9 @@ bool TrajectoryManager::computeTrajectory(DroneRacing* reactive_nav,
       planning_length_rescaled * cos(pitch) * cos(yaw),
       planning_length_rescaled * cos(pitch) * sin(yaw),
       planning_length_rescaled * sin(pitch));
+  ROS_INFO("desired velocity : %f", desired_velocity);
+  ROS_INFO("planning_length_rescaled: %f", planning_length_rescaled);
+  ROS_INFO("goal_b/x: %f;y %f;z %f",goal_b.x(), goal_b.y(), goal_b.z());
   rpg::Pose T_B_goal;
   geometry_msgs::Pose goal_pose;
   goal_pose.position.x = goal_b.x();
@@ -67,7 +70,7 @@ bool TrajectoryManager::computeTrajectory(DroneRacing* reactive_nav,
                                                                desired_velocity,
                                                                false);
   if (!success) {
-    ROS_ERROR("[%s] Failed to compute NN trajectory.", ros::this_node::getName().c_str());
+    // ROS_ERROR("[%s] Failed to compute NN trajectory.", ros::this_node::getName().c_str());
   }
   return success;
 }
